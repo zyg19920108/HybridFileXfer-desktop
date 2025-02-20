@@ -1,0 +1,7 @@
+import console; 
+进度=50
+var jsUpdateProgressText = `document.getElementById("progress-text").innerText="`+进度+`%";`
+
+console.log( jsUpdateProgressText );
+
+console.pause();

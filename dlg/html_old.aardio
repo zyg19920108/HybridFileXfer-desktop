@@ -1,0 +1,270 @@
+import win.ui;
+import java;
+import console;
+import preg;
+import inet.stat;
+import process;
+/*DSG{{*/
+var winform = win.form(text="Edge 浏览器控件 - web.view";right=751;bottom=205;bgcolor=16777215;border="none")
+winform.add()
+/*}}*/
+
+import web.view;
+var wb = web.view(winform);
+
+//导出为 Javascript 中的 aardio 对象
+wb.external = {
+    close = function() {
+        winform.close();
+    };
+    hitCaption = function() {
+        winform.hitCaption();
+    };
+    hitMin = function() {
+        winform.hitMin();
+    };
+    hitMax = function() {
+        return winform.hitMax();
+    };
+    java = function() {
+        jarpath = io.fullpath("\java\HybridFileXfer.jar")
+        var prcs = java.popenProcess(
+            "-jar", //运行jar
+            jarpath, "-c", "adb"
+        );
+        for (all, out, err in prcs.each()) {
+	console.log(out)
+    检测输出(out); // 处理输出逻辑   
+}
+
+    }
+    
+}
+
+// wb.go("/res/index.html"); //直接打开资源目录下的文件
+wb.html = /**
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>手机连接状态</title>
+<style>
+    html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #FFFFFF;
+    }
+    #title-bar {
+        height: 32px;
+        padding: 0px;
+        margin: 0px;
+        background-color: #f0f0f0; /* 添加灰色背景 */
+        position: relative; /* 确保背景覆盖到横线 */
+        z-index: 1; /* 确保标题栏在横线之上 */
+    }
+    #title-bar .caption {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        padding-left: 10px;
+        color: #000000;
+        line-height: 32px;
+        font-size: 14px;
+        cursor: default;
+        user-select:none;
+    }
+    #title-bar .buttons {
+        position: fixed;
+        top: 1px;
+        right: 1px;
+    }
+    #title-bar button {
+        font: 14px Marlett;
+        color: #000000;
+        background-color: transparent;
+        border: none;
+        height: 28px;
+        width: 28px;
+    }
+    #title-bar button:hover {
+        background-color: #FF4500;
+    }
+    #title-bar button:active {
+        background-color: #B0451E;
+        color: #C5C5C5;
+    }
+    #main {
+        padding: 12px;
+        margin-top: 2px; /* 调整为32px，为标题栏留出空间 */
+        color: #C0C0C0;
+    }
+    .separator {
+        height: 1px;
+        background-color: #cccccc; /* 灰色横线 */
+        width: 100%;
+        margin: 0 0 0; /* 横线紧接标题栏下方 */
+        position: absolute;
+        top: 32px; /* 横线位置固定在标题栏下方 */
+        left: 0;
+    }
+    .row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .row label {
+        color: #333;
+        margin-right: 10px;
+        white-space: nowrap;
+        font-size: 16px;
+    }
+    .button {
+        padding: 5px 10px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 4px;
+        text-align: center;
+        transition: background-color 0.3s, transform 0.3s;
+        font-size: 16px;
+    }
+    .button:hover {
+        background-color: #0056b3;
+    }
+    .button.active {
+        background-color: #dc3545;
+        transform: scale(1.05);
+    }
+    .file-name-wrapper {
+        display: inline-block;
+        width: 800px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .file-name {
+        color: #007bff;
+        font-weight: bold;
+        display: inline-block;
+        animation: scrollText 10s linear infinite;
+    }
+    .progress-bar {
+        width: 100%;
+        background-color: #f3f3f3;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 5px;
+        position: relative;
+    }
+    .progress {
+        height: 20px;
+        background-color: #28a745;
+        width: 0%;
+        transition: width 0.3s;
+        position: relative;
+    }
+    .progress-text {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        margin: 0;
+        padding: 0;
+        line-height: 20px;
+        color: #fff;
+        text-align: center;
+        font-size: 14px;
+    }
+    @keyframes scrollText {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+</style>
+</head>
+<body>
+<div id="title-bar">
+  <div class="caption" onmousedown="aardio.hitCaption()">多轨快传GUI</div>
+  <div class="buttons">
+    <button id="min-btn" onclick="aardio.hitMin()">0</button>
+    <button id="max-btn"  onclick="aardio.hitMax()">1</button>
+    <button id="close-btn" onclick="aardio.close()">r</button>
+  </div>
+</div>
+<div class="separator"></div> <!-- 添加灰色横线 -->
+<div id="main">
+  <div class="container">
+    <div class="row status">
+        <label for="connection-status">手机连接状态:</label>
+        <div class="button" id="connection-status">点击连接</div>
+    </div>
+    <div class="row transfer-info">
+        <label for="transfer-file">当前正在传输:</label>
+        <div class="file-name-wrapper">
+            <span class="file-name" id="transfer-file">周杰伦的最长的电影.mp3</span>
+        </div>
+    </div>
+    <div class="progress-info">
+        <label for="progress-bar" style="color: black;">当前传输进度:</label>
+        <div class="progress-bar">
+            <div class="progress" id="progress-bar">
+                <span class="progress-text" id="progress-text">0%</span>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    const button = document.getElementById('connection-status');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+
+    button.addEventListener('click', () => {
+        button.classList.add('active');
+        aardio.java();
+    });
+
+    function simulateProgress() {
+        let width = 0;
+        const interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+                button.classList.remove('active');
+                progressText.textContent = '100%';
+            } else {
+                width++;
+                progressBar.style.width = width + '%';
+                progressText.textContent = width + '%';
+            }
+        }, 20);
+    }
+</script>
+</body>
+</html>
+**/
+
+//添加阴影边框
+import win.ui.shadow;
+win.ui.shadow(winform);
+
+//设置窗口缩放范围
+import win.ui.minmax;
+win.ui.minmax(winform);
+
+//切换最大化、还原按钮
+winform.adjust = function(cx, cy, wParam) {
+    if (wParam == 0x2 /*_SIZE_MAXIMIZED*/ ) {
+        wb.doScript(`document.getElementById("max-btn").innerText="2";`)
+    }
+    elseif(wParam == 0x0 /*_SIZE_RESTORED*/ ) {
+        wb.doScript(`document.getElementById("max-btn").innerText="1";`)
+    }
+};
+
+winform.show();
+win.loopMessage();
