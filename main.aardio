@@ -1,0 +1,44 @@
+import win.ui;
+import win.ui.atom;
+import win.ui.menu;
+import win.util.tray;
+import console
+import thread
+import web.view
+/*DSG{{*/
+var mainForm = win.form(text="多轨快传";right=908;bottom=521)
+mainForm.add()
+/*}}*/
+
+var atom,hwnd/*冲突窗口的句柄,该函数会自动激活此窗口*/ = mainForm.atom("CF865C9A-D54D-40A6-B2A6-60F6908EFE37");
+if(!atom){
+	/*为窗口设置原子值可以避免一个程序重复运行多个实例*/
+	win.quitMessage();	return;
+}
+
+
+wb=web.view(mainForm)
+wb.adjust()
+wb.enableDefaultContextMenus(false)
+wb.enableDevTools(false)
+
+
+//检测JRE文件
+loadcodex("\dlg\javatest.aardio");
+loadcodex("\dlg\HybridFileXfer.aardio");
+//运行 HybridFileXfer
+thread.invoke(start_HybridFileXfer)
+
+wb.external = {
+	openpath= function(path){
+	var path=string.replace(path,"/","\")
+	process.exploreSelect(path)
+	};
+}
+
+wb.go("\JAR\www\index.html")
+
+
+
+mainForm.show();
+win.loopMessage();

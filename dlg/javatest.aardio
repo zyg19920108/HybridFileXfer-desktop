@@ -1,0 +1,21 @@
+import console
+import java
+import fsys;
+import inet.httpFile
+var path=fsys.attrib("\dragonwell-21.0.5.0.5+9-GA\bin\java.exe")
+if(path=-1){
+//下载对话框
+import win
+import inet.downBox;
+	var downBox = inet.downBox(winform,"下载JRE中...",true )
+	var ok = downBox.test( "https://dragonwell.oss-cn-shanghai.aliyuncs.com/21.0.5.0.5%2B9/Alibaba_Dragonwell_Extended_21.0.5.0.5.9_x64_windows.zip", "/download/jre.zip" ) 
+	if( ok ){
+	
+	}
+	elseif( ok === null ){
+		win.msgboxErr("JRE下载错误,HTTP错误代码:"+ ( downBox.statusCode : ""));
+	}
+	 var Savepath = downBox.download( "https://dragonwell.oss-cn-shanghai.aliyuncs.com/21.0.5.0.5%2B9/Alibaba_Dragonwell_Extended_21.0.5.0.5.9_x64_windows.zip" , "/download/jre.zip" ) ; 
+	import zlib.unzip;
+ 	zlib.unzip.extract("/download/jre.zip","\")
+}

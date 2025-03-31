@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="tab-container">
+            <div class="tab active" data-tab="current">当前传输</div>
+            <div class="tab" data-tab="history">历史记录</div>
+        </div>
+        
+        <div id="current-tab" class="tab-content active">
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="type-filter">传输类型:</label>
+                    <select id="type-filter">
+                        <option value="all">全部</option>
+                        <option value="upload">上传</option>
+                        <option value="download">下载</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="status-filter">状态:</label>
+                    <select id="status-filter">
+                        <option value="all">全部</option>
+                        <option value="queued">等待中</option>
+                        <option value="in-progress">传输中</option>
+                        <option value="completed">已完成</option>
+                        <option value="failed">失败</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filetype-filter">文件类型:</label>
+                    <select id="filetype-filter">
+                        <option value="all">全部</option>
+                        <option value="archive">压缩包 (zip/rar/7z)</option>
+                        <option value="executable">可执行文件 (exe/msi)</option>
+                        <option value="apk">安卓应用 (apk)</option>
+                        <option value="document">文档 (pdf/doc/xls/ppt)</option>
+                        <option value="image">图片 (jpg/png/gif)</option>
+                        <option value="video">视频 (mp4/mov/avi)</option>
+                        <option value="audio">音频 (mp3/wav)</option>
+                        <option value="iso">光盘映像 (iso/img)</option>
+                        <option value="text">文本文件 (txt/log)</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="search-filter">搜索:</label>
+                    <input type="text" id="search-filter" placeholder="输入文件名...">
+                </div>
+            </div>
+            
+            <div id="folders-container"></div>
+            <div class="last-updated" id="last-updated">最后更新: -</div>
+        </div>
+        
+        <div id="history-tab" class="tab-content">
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="history-type-filter">传输类型:</label>
+                    <select id="history-type-filter">
+                        <option value="all">全部</option>
+                        <option value="upload">上传</option>
+                        <option value="download">下载</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="history-status-filter">状态:</label>
+                    <select id="history-status-filter">
+                        <option value="all">全部</option>
+                        <option value="completed">已完成</option>
+                        <option value="failed">失败</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="history-filetype-filter">文件类型:</label>
+                    <select id="history-filetype-filter">
+                        <option value="all">全部</option>
+                        <option value="archive">压缩包 (zip/rar/7z)</option>
+                        <option value="executable">可执行文件 (exe/msi)</option>
+                        <option value="apk">安卓应用 (apk)</option>
+                        <option value="document">文档 (pdf/doc/xls/ppt)</option>
+                        <option value="image">图片 (jpg/png/gif)</option>
+                        <option value="video">视频 (mp4/mov/avi)</option>
+                        <option value="audio">音频 (mp3/wav)</option>
+                        <option value="iso">光盘映像 (iso/img)</option>
+                        <option value="text">文本文件 (txt/log)</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="history-search-filter">搜索:</label>
+                    <input type="text" id="history-search-filter" placeholder="输入文件名...">
+                </div>
+                <div class="filter-group">
+                    <label for="date-filter">日期:</label>
+                    <input type="date" id="date-filter">
+                </div>
+            </div>
+            
+            <div id="history-folders-container"></div>
+            <button id="clear-history" class="clear-history">清空历史记录</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

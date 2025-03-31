@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project ver="10" name="多轨快传托盘" libEmbed="true" icon="res\logo.ico" ui="win" output="多轨快传托盘.exe" CompanyName="单位名称" FileDescription="多轨快传托盘" LegalCopyright="Copyright (C) 作者 2025" ProductName="多轨快传托盘" InternalName="多轨快传托盘" FileVersion="0.0.0.7" ProductVersion="0.0.0.7" publishDir="/dist/" dstrip="true">
+	<file name="main.aardio" path="main.aardio" comment="main.aardio"/>
+	<folder name="资源文件" path="res" embed="true" local="false" ignored="false">
+		<file name="logo.ico" path="res\logo.ico" comment="res\logo.ico"/>
+	</folder>
+	<folder name="窗体文件" path="dlg" comment="目录" embed="true" local="false" ignored="false">
+		<file name="javatest.aardio" path="dlg\javatest.aardio" comment="dlg\javatest.aardio"/>
+		<file name="HybridFileXfer.aardio" path="dlg\HybridFileXfer.aardio" comment="dlg\1.aardio"/>
+	</folder>
+	<folder name="JAR" path="JAR" comment="JAR" local="false" embed="false" ignored="false">
+		<file name="HybridFileXfer-1.0.jar" path="JAR\HybridFileXfer-1.0.jar" comment="JAR\HybridFileXfer-1.0.jar"/>
+		<folder name="www" path="JAR\www" comment="JAR\www" local="false" embed="false" ignored="false">
+			<file name="index.html" path="JAR\www\index.html" comment="JAR\www\index.html"/>
+			<file name="script.js" path="JAR\www\script.js" comment="JAR\www\script.js"/>
+			<file name="styles.css" path="JAR\www\styles.css" comment="JAR\www\styles.css"/>
+		</folder>
+	</folder>
+</project>
