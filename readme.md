@@ -4,7 +4,7 @@
 
 **多轨快传gui** 是一款基于aardio开发的Windows桌面应用程序，旨在提供便捷的文件传输监控与管理功能。本应用通过系统托盘图标运行，在后台监控文件传输状态，并提供用户界面以查看当前传输和历史记录。
 
-本应用的文件传输内核基于开源项目 [HybridFileXfer](https://github.com/weixiansen574/HybridFileXfer) 进行二次开发。HybridFileXfer 是一个混合文件传输工具，支持多种传输协议和多线程并发传输，从而实现快速、稳定的文件传输。
+本应用的文件传输内核基于开源项目`多轨快传`[HybridFileXfer](https://github.com/weixiansen574/HybridFileXfer) 进行二次开发。`多轨快传`HybridFileXfer 是一个混合文件传输工具，支持多种传输协议和多线程并发传输，从而实现快速、稳定的文件传输。
 
 ### 1.1 HybridFileXfer 简介
 
@@ -119,12 +119,11 @@ HybridFileXfer.aardio 负责启动 HybridFileXfer 核心传输服务。
 ## 6. 注意事项
 
 *   为保证运行稳定性，程序会自动下载并安装jre文件。
-*   确保设备已连接到计算机，并启动多轨快传app服务器。app下载请转至 [HybridFileXfer](https://github.com/weixiansen574/HybridFileXfer) app下载页面下载。
+*   确保设备已连接到计算机，并启动多轨快传app服务器。app下载请转至 `多轨快传`[HybridFileXfer](https://github.com/weixiansen574/HybridFileXfer) app下载页面下载。
 *   因aardio打包的exe程序会被360误杀，请下载aardio ide自行构建，使用本项目构建的exe程序请自行添加白名单且本人不负任何责任。
 
 ## 7. 贡献
-
-欢迎参与本项目的开发和改进！如果您有任何建议或意见，请提交 issue 或 pull request。
+目前本项目还在开发中，欢迎参与项目的开发和改进。如果您有任何建议或意见，请提交 issue 或 pull request。
 
 ## 8. 许可证
 
