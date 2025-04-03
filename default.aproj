@@ -1,19 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project ver="10" name="多轨快传托盘" libEmbed="true" icon="res\logo.ico" ui="win" output="多轨快传托盘.exe" CompanyName="单位名称" FileDescription="多轨快传托盘" LegalCopyright="Copyright (C) 作者 2025" ProductName="多轨快传托盘" InternalName="多轨快传托盘" FileVersion="0.0.0.7" ProductVersion="0.0.0.7" publishDir="/dist/" dstrip="true">
+<project ver="10" name="多轨快传托盘" libEmbed="true" icon="res\logo.ico" ui="win" output="多轨快传托盘.exe" CompanyName="单位名称" FileDescription="多轨快传托盘" LegalCopyright="Copyright (C) 作者 2025" ProductName="多轨快传托盘" InternalName="多轨快传托盘" FileVersion="0.0.0.7" ProductVersion="0.0.0.7" publishDir="/dist/" dstrip="true" local="false" ignored="false">
 	<file name="main.aardio" path="main.aardio" comment="main.aardio"/>
 	<folder name="资源文件" path="res" embed="true" local="false" ignored="false">
 		<file name="logo.ico" path="res\logo.ico" comment="res\logo.ico"/>
 	</folder>
 	<folder name="窗体文件" path="dlg" comment="目录" embed="true" local="false" ignored="false">
+		<file name="HybridFileXfer.aardio" path="dlg\HybridFileXfer.aardio" comment="dlg\HybridFileXfer.aardio"/>
 		<file name="javatest.aardio" path="dlg\javatest.aardio" comment="dlg\javatest.aardio"/>
-		<file name="HybridFileXfer.aardio" path="dlg\HybridFileXfer.aardio" comment="dlg\1.aardio"/>
+		<file name="tuopan.aardio" path="dlg\tuopan.aardio" comment="dlg\tuopan.aardio"/>
 	</folder>
 	<folder name="JAR" path="JAR" comment="JAR" local="false" embed="false" ignored="false">
 		<file name="HybridFileXfer-1.0.jar" path="JAR\HybridFileXfer-1.0.jar" comment="JAR\HybridFileXfer-1.0.jar"/>
-		<folder name="www" path="JAR\www" comment="JAR\www" local="false" embed="false" ignored="false">
+		<folder name="www" path="JAR\www" comment="JAR\www">
 			<file name="index.html" path="JAR\www\index.html" comment="JAR\www\index.html"/>
-			<file name="script.js" path="JAR\www\script.js" comment="JAR\www\script.js"/>
-			<file name="styles.css" path="JAR\www\styles.css" comment="JAR\www\styles.css"/>
+			<file name="README.md" path="JAR\www\README.md" comment="JAR\www\README.md"/>
+			<folder name="11" path="JAR\www\11" comment="JAR\www\11">
+				<folder name="my-transfer-app" path="JAR\www\11\my-transfer-app" comment="JAR\www\11\my-transfer-app"/>
+			</folder>
+			<folder name="css" path="JAR\www\css" comment="JAR\www\css">
+				<file name="style.css" path="JAR\www\css\style.css" comment="JAR\www\css\style.css"/>
+			</folder>
+			<folder name="js" path="JAR\www\js" comment="JAR\www\js">
+				<file name="config.js" path="JAR\www\js\config.js" comment="JAR\www\js\config.js"/>
+				<file name="core.js" path="JAR\www\js\core.js" comment="JAR\www\js\core.js"/>
+				<file name="dom.js" path="JAR\www\js\dom.js" comment="JAR\www\js\dom.js"/>
+				<file name="events.js" path="JAR\www\js\events.js" comment="JAR\www\js\events.js"/>
+				<file name="filters.js" path="JAR\www\js\filters.js" comment="JAR\www\js\filters.js"/>
+				<file name="history.js" path="JAR\www\js\history.js" comment="JAR\www\js\history.js"/>
+				<file name="init.js" path="JAR\www\js\init.js" comment="JAR\www\js\init.js"/>
+				<file name="script.js" path="JAR\www\js\script.js" comment="JAR\www\js\script.js"/>
+				<file name="utils.js" path="JAR\www\js\utils.js" comment="JAR\www\js\utils.js"/>
+			</folder>
 		</folder>
 	</folder>
 </project>

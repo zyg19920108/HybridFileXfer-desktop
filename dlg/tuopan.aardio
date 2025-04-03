@@ -1,0 +1,81 @@
+form = {
+    ...
+};
+winform = form[1];
+import mouse;
+winform.wndproc = function(hwnd, message, wparam, lparam) {
+    select (message) { //判断消息类型
+        case 0x10 /*_WM_CLOSE*/ {
+            fadeHide();
+        };       
+        case (0x400 + 9981 /*_WM_TRAYMESSAGE*/ ) { //托盘图标消息
+            select (lparam) {
+                case 0x203 /*_WM_LBUTTONDBLCLK*/ { //双击托盘图标打开窗口
+                    if (win.isVisible(winform.hwnd)) {
+                        winform.hitmin() //最小化窗口
+                        winform.popmenu.setString(1, "显示")
+                    }
+                    else {
+                        winform.show(0x9 /*_SW_RESTORE*/ );
+                        win.setForeground(winform.hwnd)
+                        winform.popmenu.setString(1, "隐藏")
+                    }
+                }
+                case 0x205 /*_WM_RBUTTONUP*/ { //单击鼠标右键弹出菜单
+                    x, y = mouse.getPos();
+                    winform.popmenu.popup(x, y, true)
+                }
+                case 0x201 /*_WM_LBUTTONDOWN*/ { //单击鼠标左键前置窗口
+                    win.setForeground(winform.hwnd)
+                }
+            }
+            
+        }
+        case (0x112 /*_WM_SYSCOMMAND*/ ) { //系统命令消息
+            if (wparam == 0xF020 /*_SC_MINIMIZE*/ ) { //用户点击了最小化按钮
+                winform.show(false); //隐藏窗口
+                winform.popmenu.setString(1, "显示")
+                return true; //阻击默认消息传递，取消最小化过程
+            }
+        }
+        
+    }
+    
+    //无返回值则继续调用默认回调函数
+} //endproc
+
+fadeHide = function() {
+    for (i = 17; 1; - 1) {
+        winform.transparent(i * 15);
+        x, y, cx, cy = winform.getPos();
+        winform.setPos(x - 1, y - 1, cx + 2, cy + 2);
+        win.delay(5);
+    };
+    win.quitMessage();
+}
+
+winform.popmenu = win.ui.popmenu(winform); //创建弹出菜单
+
+winform.popmenu.add("隐藏", function(id) {
+    //在下面输入菜单响应代码
+    stat = win.isVisible(winform.hwnd);
+    if (stat) {
+        winform.show(false);
+        winform.popmenu.setString(1, "显示")
+    }
+    else {
+        winform.show(true);
+        winform.popmenu.setString(1, "隐藏")
+    }
+});
+
+winform.popmenu.add(); //分隔线
+winform.popmenu.add('退出', function(id) {
+    winform.close()
+})
+//下面创建托盘图标
+import win.util.tray;
+tray = win.util.tray(winform) //创建托盘图标
+tray.message = 0x400 + 9981 /*_WM_TRAYMESSAGE*/
+tray.tip = "多轨快传" //设置鼠标提示
+tray.pop('多轨快传已启动', "多轨快传已启动");

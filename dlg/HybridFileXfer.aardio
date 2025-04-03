@@ -7,10 +7,4 @@ java.path.setJreHome("\dragonwell-21.0.5.0.5+9-GA\bin")
 jarpath = io.fullpath("\JAR\HybridFileXfer-1.0.jar");
 prcs = java.popenProcess("-jar", jarpath, "-c", "adb");
 prcs.killOnExit()
-for (all, out, err in prcs.each()) {
-        if (string.cmpMatch(out, "控制通道连接到手机失败，请检查手机的服务端是否启动？")) {
-			 import win     
-            win.msgbox("连接失败！请检查APP！","连接失败",2000);	
-        }
- }
 }

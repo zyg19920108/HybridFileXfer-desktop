@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
-        
         <div class="tab-container">
             <div class="tab active" data-tab="current">当前传输</div>
             <div class="tab" data-tab="history">历史记录</div>
         </div>
-        
+        <hr>
         <div id="current-tab" class="tab-content active">
             <div class="filters">
                 <div class="filter-group">
@@ -104,10 +103,16 @@
             </div>
             
             <div id="history-folders-container"></div>
-            <button id="clear-history" class="clear-history">清空历史记录</button>
+            <button id="select-all" class="select-all-btn">全选</button>
+            <button id="clear-history" class="clear-history">删除选中项</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/history.js"></script>
+    <script src="js/init.js"></script>
+
 </body>
 </html>
