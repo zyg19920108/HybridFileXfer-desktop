@@ -15,32 +15,51 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import top.weixiansen574.hybridfilexfer.TransferStatusServer;
 public class Main {
+
+    private static final int STATUS_SERVER_PORT = 5741; // 状态监控服务器端口
+    private static TransferStatusServer statusServer; // 添加这行保存服务器实例
+
     private static final ConnectServerCallback connectServerCallback = new ConnectServerCallback() {
         @Override
         public void onConnectingControlChannel(String address, int port) {
+            String message = String.format("正在连接控制通道: %s:%d", address, port);
+            TransferStatusServer.updateConnectionStatus("connecting_control", message);
             Strings.printf("connecting_control_channel", address);
         }
 
         @Override
         public void onVersionMismatch(int localVersion, int remoteVersion) {
+            String message = String.format("版本不匹配: 本地v%d, 远程v%d", localVersion, remoteVersion);
+            TransferStatusServer.updateConnectionStatus("version_mismatch", message);
             Strings.printf("version_mismatch", localVersion, remoteVersion);
         }
 
         @Override
         public void onConnectControlFailed() {
+            TransferStatusServer.updateConnectionStatus("control_failed", "控制通道连接失败");
             Strings.printf("connect_control_failed");
         }
 
         @Override
         public void onConnectingTransferChannel(String name, InetAddress inetAddress, InetAddress bindAddress) {
+            String message = String.format("正在连接传输通道 %s: %s (绑定地址: %s)", 
+                name, 
+                inetAddress.getHostAddress(),
+                bindAddress == null ? "null" : bindAddress.getHostAddress());
+            TransferStatusServer.updateConnectionStatus("connecting_transfer", message);
             Strings.printf("connecting_transfer_channel", name, inetAddress.getHostAddress(),
                     bindAddress == null ? "null" : bindAddress.getHostAddress());
         }
 
         @Override
         public void onConnectTransferChannelFailed(String name, InetAddress inetAddress, Exception e) {
+            String message = String.format("传输通道 %s 连接失败: %s (%s)", 
+                name, 
+                inetAddress.getHostAddress(),
+                e.toString());
+            TransferStatusServer.updateConnectionStatus("transfer_failed", message);
             Strings.printf("connect_transfer_failed", name, inetAddress.getHostAddress(), e.toString());
         }
 
@@ -81,17 +100,31 @@ public class Main {
 
         @Override
         public void onFileUploading(String iName, String path, long targetSize, long totalSize) {
-
+            double progress = totalSize > 0 ? (double) targetSize / totalSize * 100 : 0;
+            TransferStatusServer.updateTransferStatus(path, progress, targetSize, totalSize, "upload");
         }
 
         @Override
         public void onFileDownloading(String iName, String path, long targetSize, long totalSize) {
-
-        }
+            double progress = totalSize > 0 ? (double) targetSize / totalSize * 100 : 0;
+            TransferStatusServer.updateTransferStatus(path, progress, targetSize, totalSize, "download");
+   }
 
         @Override
         public void onSpeedInfo(List<TrafficInfo> trafficInfoList) {
-
+            if (trafficInfoList != null) {
+                for (TrafficInfo info : trafficInfoList) {
+                    if (info.iName == null) {  // 添加null检查
+                        continue;
+                    }
+                    double uploadSpeed = info.uploadTraffic;
+                    double downloadSpeed = info.downloadTraffic;
+                    System.out.printf("{Channel=`%s`, Upload=`%.2f MB/s`, Download=`%.2f MB/s`}|\n",
+                            info.iName, uploadSpeed, downloadSpeed);
+                    // 更新速度信息到服务器
+                    TransferStatusServer.updateSpeedInfo(info.iName, uploadSpeed, downloadSpeed);
+                }
+            }
         }
 
         @Override
@@ -129,6 +162,9 @@ public class Main {
 
         @Override
         public void onComplete(boolean isUpload, long traffic, long time) {
+            // 任务完成时将所有传输进度设为100%
+            TransferStatusServer.completeAllTransfers();
+            
             if (isUpload) {
                 Strings.printf("upload_complete", Utils.formatSpeed(traffic / time * 1000), Utils.formatTime(time), Utils.formatFileSize(traffic));
             } else {
@@ -144,10 +180,16 @@ public class Main {
 
 
     public static void main(String[] args) throws Exception {
+        // 添加关闭钩子
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (statusServer != null) {
+                statusServer.stop();
+            }
+        }));
         Map<String, String> paramMap = new HashMap<>();
         parseArguments(paramMap, args);
         String connect = paramMap.get("-c");
-        String homeDir = paramMap.get("-d");
+        String homeDir = paramMap.get("-home_dir");
         if (homeDir == null) {
             homeDir = "/";
         }
@@ -180,6 +222,14 @@ public class Main {
 
         JdkHFXClient hfxClient = new JdkHFXClient(serverAddress, 5740, homeDir);
         if (hfxClient.connect(connectServerCallback)) {
+            // 启动传输状态监控服务器
+            try {
+                statusServer = new TransferStatusServer(STATUS_SERVER_PORT); // 保存实例
+                statusServer.start();
+            } catch (IOException e) {
+                System.err.println("Failed to start transfer status server: " + e.getMessage());
+            }
+            
             hfxClient.start(clientCallBack);
         }
     }
