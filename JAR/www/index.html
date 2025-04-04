@@ -7,11 +7,13 @@
 </head>
 <body>
     <div class="container">
-        <div class="tab-container">
-            <div class="tab active" data-tab="current">当前传输</div>
-            <div class="tab" data-tab="history">历史记录</div>
+        <div class="tab-container-wrapper">
+            <div class="tab-container">
+                <div class="tab active" data-tab="current">当前传输</div>
+                <div class="tab" data-tab="history">历史记录</div>
+                <button id="theme-toggle" onclick="toggleTheme()">夜间模式</button>
+            </div>
         </div>
-        <hr>
         <div id="current-tab" class="tab-content active">
             <div class="filters">
                 <div class="filter-group">
@@ -26,10 +28,8 @@
                     <label for="status-filter">状态:</label>
                     <select id="status-filter">
                         <option value="all">全部</option>
-                        <option value="queued">等待中</option>
                         <option value="in-progress">传输中</option>
                         <option value="completed">已完成</option>
-                        <option value="failed">失败</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -101,10 +101,12 @@
                     <input type="date" id="date-filter">
                 </div>
             </div>
+            <div class="action-buttons" style="margin: 5px 0;">
+                <button id="select-all" class="open-folder-btn">全选</button>
+                <button id="clear-history" class="open-folder-btn" style="background-color: #ff4d4d;">删除选中项</button>
+            </div>
             
             <div id="history-folders-container"></div>
-            <button id="select-all" class="select-all-btn">全选</button>
-            <button id="clear-history" class="clear-history">删除选中项</button>
         </div>
     </div>
 

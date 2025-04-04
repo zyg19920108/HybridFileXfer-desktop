@@ -1,5 +1,11 @@
 // ==================== 初始化 ====================
+// 在 DOMContentLoaded 事件监听器中添加主题初始化
 document.addEventListener('DOMContentLoaded', () => {
+  // 初始化主题
+  const savedTheme = localStorage.getItem('theme') || 'light-mode';
+  document.body.className = savedTheme;
+  updateThemeButton(savedTheme);
+
   // 初始化数据库
   initDB()
     .then(() => {
@@ -189,4 +195,22 @@ function deleteRecordsFromDB(filePaths, folderPaths) {
     transaction.onerror = () => reject(transaction.error);
   });
 }
+
+// 在文件末尾添加主题相关函数
+function toggleTheme() {
+  const isNightMode = document.body.classList.contains('night-mode');
+  const newTheme = isNightMode ? 'light-mode' : 'night-mode';
+  
+  document.body.className = newTheme;
+  localStorage.setItem('theme', newTheme);
+  updateThemeButton(newTheme);
+}
+
+function updateThemeButton(theme) {
+  const themeBtn = document.getElementById('theme-toggle');
+  themeBtn.textContent = theme === 'night-mode' ? '日间模式' : '夜间模式';
+}
+
+// 暴露函数给全局
+window.toggleTheme = toggleTheme;
 

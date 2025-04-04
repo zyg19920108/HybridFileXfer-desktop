@@ -19,11 +19,51 @@ h1 {
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
 }
+.tab-container-wrapper {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
 .tab-container {
     display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-start;
     align-items: center;
 }
 
+.tab {
+    padding: 12px 24px;
+    margin: 0;
+    position: relative;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    color: #1890ff;
+    font-weight: 500;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #1890ff;
+}
+
+.tab:hover:not(.active) {
+    color: #1890ff;
+    background-color: rgba(24, 144, 255, 0.05);
+}
 .speed-display {
     display: flex;
     gap: 15px;
@@ -328,4 +368,448 @@ select, input {
 
 .download-speed {
   color: #2ecc71;
+}
+.tab-content .filters {
+    margin: 5px 0;
+}
+.filter-group {
+    display: flex;
+    align-items: center;
+}
+.filter-group label {
+    margin-right: 5px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+select, input {
+    padding: 5px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+.folder {
+    margin-bottom: 5px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.folder-header {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+.folder-icon {
+    margin-right: 10px;
+    color: #ffc107;
+}
+.folder-name {
+    flex-grow: 1;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.folder-path {
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-left: 10px;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.folder-count {
+    background-color: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    margin-left: 10px;
+}
+.folder-content {
+    display: none;
+    padding: 0;
+    margin: 0;
+}
+.folder.expanded .folder-content {
+    display: block;
+}
+.file-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+}
+.file-item:hover {
+    background-color: #f8f9fa;
+}
+.file-icon {
+    margin-right: 10px;
+    color: #6c757d;
+    min-width: 20px;
+}
+.file-info {
+    flex-grow: 1;
+    min-width: 0;
+}
+.file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.file-progress {
+    width: 100%;
+    height: 6px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+.file-progress-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+.progress-upload {
+    background-color: #17a2b8;
+}
+.progress-download {
+    background-color: #6c757d;
+}
+.file-details {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+    min-width: 300px;
+    justify-content: flex-end;
+}
+.file-size {
+    color: #6c757d;
+    font-size: 0.9em;
+    min-width: 120px;
+    text-align: right;
+}
+.file-time {
+    color: #6c757d;
+    font-size: 0.9em;
+    min-width: 120px;
+    text-align: right;
+    margin-left: 15px;
+}
+.file-status {
+    margin-left: 15px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    color: white;
+}
+.status-queued {
+    background-color: #6c757d;
+}
+.status-uploading {
+    background-color: #17a2b8;
+}
+.status-downloading {
+    background-color: #007bff;
+}
+.status-completed {
+    background-color: #28a745;
+}
+.status-failed {
+    background-color: #dc3545;
+}
+.status-paused {
+    background-color: #ffc107;
+    color: #212529;
+}
+.summary {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+.summary-item {
+    display: flex;
+    margin-bottom: 5px;
+}
+.summary-label {
+    font-weight: bold;
+    min-width: 120px;
+}
+.empty-folder {
+    padding: 15px;
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+}
+.last-updated {
+    font-size: 0.8em;
+    color: #6c757d;
+    text-align: right;
+    margin-top: 5px;
+}
+.clear-history {
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.clear-history:hover {
+    background-color: #c82333;
+}
+.open-folder-btn {
+    margin-left: 10px;
+    padding: 2px 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+.open-folder-btn:hover {
+    background-color: #0069d9;
+}
+.file-item {
+  transition: all 0.3s ease;
+}
+
+.file-item.updating {
+    background-color: rgba(100, 200, 255, 0.1); /* 降低透明度 */
+    transition: background-color 0.3s ease; /* 添加平滑过渡 */
+  }
+
+.file-progress-bar {
+  transition: width 0.5s ease;
+}
+
+.folder-content {
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+.speed-container {
+  position: fixed;
+  right: 20px;
+  top: 80px;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 250px;
+}
+
+.speed-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.speed-channel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.upload-speed {
+  color: #e74c3c;
+}
+
+.download-speed {
+  color: #2ecc71;
+}
+.tab-container {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    transform: translateX(0) !important;
+}
+body.night-mode {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+body.light-mode {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.night-mode .container {
+    background-color: #2d2d2d;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.night-mode .folder {
+    background-color: #2d2d2d;
+    border-color: #404040;
+}
+
+.night-mode .folder-header {
+    background-color: #333333;
+}
+
+.night-mode .file-item {
+    background-color: #252525;
+    border-color: #353535;
+}
+
+.night-mode #select-all,
+.night-mode #clear-history {
+    background-color: #0069d9;
+}
+
+.night-mode #clear-history {
+    background-color: #b33939;
+}
+
+.night-mode #clear-history:hover {
+    background-color: #992b2b;
+}
+.open-folder-btn {
+    margin-left: 10px;
+    padding: 2px 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+.open-folder-btn:hover {
+    background-color: #0069d9;
+}
+.file-item {
+  transition: all 0.3s ease;
+}
+
+.file-item.updating {
+    background-color: rgba(100, 200, 255, 0.1); /* 降低透明度 */
+    transition: background-color 0.3s ease; /* 添加平滑过渡 */
+  }
+
+.file-progress-bar {
+  transition: width 0.5s ease;
+}
+
+.folder-content {
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+}
+.speed-container {
+  position: fixed;
+  right: 20px;
+  top: 80px;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 250px;
+}
+
+.speed-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.speed-channel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.upload-speed {
+  color: #e74c3c;
+}
+
+.download-speed {
+  color: #2ecc71;
+}
+.night-mode select,
+.night-mode input {
+    background-color: #333;
+    color: #fff;
+    border-color: #666;
+}
+
+.night-mode input::placeholder {
+    color: #999;
+}
+
+/* 修复下拉选项的背景色 */
+.night-mode .folder-count {
+    background-color: #444;
+    color: #fff;
+}
+
+.night-mode .tab-container-wrapper {
+    background-color: #333333;
+    border-bottom-color: #666;
+}
+
+.night-mode .tab-container {
+    border-bottom-color: #666;
+}
+
+.night-mode .tab {
+    background-color: #333333;
+    border-color: #666;
+}
+#theme-toggle {
+    margin-left: auto;  /* 这个属性会让按钮靠右 */
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+#theme-toggle:hover {
+    background-color: #0069d9;
+}
+
+.night-mode #theme-toggle {
+    background-color: #4a4a4a;
+    color: #ffffff;
+}
+
+.night-mode #theme-toggle:hover {
+    background-color: #5a5a5a;
+}
+.night-mode select,
+.night-mode input {
+    background-color: #333;
+    color: #fff;
+    border-color: #666;
+}
+
+.night-mode input::placeholder {
+    color: #999;
+}
+
+/* 修复下拉选项的背景色 */
+.night-mode .folder-count {
+    background-color: #444;
+    color: #fff;
+}
+
+.night-mode .tab-container-wrapper {
+    background-color: #333333;
+    border-bottom-color: #666;
+}
+
+.night-mode .tab-container {
+    border-bottom-color: #666;
+}
+
+.night-mode .tab {
+    background-color: #333333;
+    border-color: #666;
 }

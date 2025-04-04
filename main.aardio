@@ -20,7 +20,6 @@ if (!atom) {
 
 wb = web.view(mainForm)
 wb.adjust()
-wb.enableDefaultContextMenus(false)
 wb.enableDevTools(false)
 
 
@@ -59,6 +58,12 @@ wb.external = {
         }
         thread.invoke(dele,name)
     }
+        //通过adb命令打开Android设备上的文件夹
+    adbcmd = function(adbcmdopen) {
+        import process.adb
+		var prcs = process.adb.shell(adbcmdopen);
+    }
+
     
 }
 

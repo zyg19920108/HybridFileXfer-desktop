@@ -41,14 +41,14 @@ function createHistoryRecord(file, folderPath, fileName, fileExt) {
     path: file.path,
     folderPath,
     type: file.type,
-    size: file.currentSize,
+    size: file.currentSize,  // 确保这里已经是byte单位
     status: 'completed',
     startTime: now.getTime() - Math.round(file.currentSize * 10),
     endTime: now.getTime(),
     fileType: fileExt,
     fileTypeCategory: getFileTypeCategory(fileExt),
     progress: 100,
-    currentSize: file.currentSize
+    currentSize: file.currentSize  // 确保这里已经是byte单位
   };
 }
 
@@ -152,12 +152,12 @@ function renderHistory(historyData) {
   }, {});
   
   // 渲染每个文件夹
-  Object.entries(folders).forEach(([folderPath, files], index) => {
+  Object.entries(folders).forEach(([folderPath, files]) => {
     const folderElement = createHistoryFolderElement(folderPath, files);
     DOM.historyFoldersContainer.appendChild(folderElement);
     
-    // 默认展开第一个文件夹
-    if (index === 0) folderElement.classList.add('expanded');
+    // 移除默认展开第一个文件夹的逻辑
+    // 所有文件夹初始状态为折叠
   });
 }
 
@@ -194,16 +194,27 @@ function createHistoryFolderElement(folderPath, files) {
   folderPathSpan.textContent = folderPath;
   folderHeader.appendChild(folderPathSpan);
   
-  // 如果是下载类型，添加打开按钮
+  // 在文件夹头部添加安卓打开按钮
   if (files[0]?.type === 'download') {
-    const openBtn = document.createElement('button');
-    openBtn.className = 'open-folder-btn';
-    openBtn.textContent = '打开文件夹';
-    openBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      aardio?.openpath?.(folderPath);
-    });
-    folderHeader.appendChild(openBtn);
+      const openBtn = document.createElement('button');
+      openBtn.className = 'open-folder-btn';
+      openBtn.textContent = '打开文件夹';
+      openBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          aardio?.openpath?.(folderPath);
+      });
+      folderHeader.appendChild(openBtn);
+  } else if (files[0]?.type === 'upload') {
+      const openAdbBtn = document.createElement('button');
+      openAdbBtn.className = 'open-folder-btn';
+      openAdbBtn.textContent = '打开安卓文件夹';
+      openAdbBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // 使用adb命令打开安卓文件夹
+          const adbCommand = `am start -a android.intent.action.VIEW -t resource/folder -d file://${folderPath}`;
+          aardio?.adbcmd?.(adbCommand);
+      });
+      folderHeader.appendChild(openAdbBtn);
   }
   
   // 添加文件计数
@@ -227,7 +238,9 @@ function createHistoryFolderElement(folderPath, files) {
     
     const fileItem = document.createElement('div');
     fileItem.className = 'file-item';
-    fileItem.innerHTML = `
+    
+    // 构建文件项HTML
+    let fileItemHTML = `
       <div class="checkbox-container">
         <input type="checkbox" class="file-checkbox" data-path="${file.path}">
       </div>
@@ -241,11 +254,19 @@ function createHistoryFolderElement(folderPath, files) {
       <div class="file-details">
         <span class="file-size">${formatFileSize(file.size)}</span>
         <span class="file-time">${new Date(file.endTime).toLocaleString()}</span>
-        <button class="open-folder-btn" onclick="aardio?.openpath?.('${file.path}')">打开文件</button>
-      </div>
     `;
+    
+    // 只在download类型时添加打开按钮
+    if (file.type === 'download') {
+        fileItemHTML += `<button class="open-folder-btn" onclick="aardio?.openpath?.('${file.path}')">打开文件</button>`;
+    } else if (file.type === 'upload') {
+        fileItemHTML += `<button class="open-folder-btn" onclick="openAndroidFile('${file.path}')">打开安卓文件</button>`;
+    }
+    
+    fileItemHTML += `</div>`;
+    fileItem.innerHTML = fileItemHTML;
     contentDiv.appendChild(fileItem);
-  });
+});
   
   folderElement.append(folderHeader, contentDiv);
   return folderElement;
@@ -339,4 +360,97 @@ function setupRefreshInterval() {
 function setupHistorySaveInterval() {
   clearInterval(historySaveInterval);
   historySaveInterval = setInterval(saveCompletedTransfers, CONFIG.HISTORY_SAVE_INTERVAL);
+}
+
+// 添加新函数
+function openAndroidFile(filePath) {
+    // 获取文件扩展名
+    const fileExt = filePath.split('.').pop().toLowerCase();
+    // 获取对应的MIME类型
+    const mimeType = getMimeType(fileExt);
+    
+    // 构建ADB命令
+    const adbCommand = `am start -a android.intent.action.VIEW -t ${mimeType} -d file://${filePath}`;
+    
+    // 调用aardio执行ADB命令
+    aardio?.adbcmd?.(adbCommand);
+}
+
+// 辅助函数：根据文件扩展名获取MIME类型
+function getMimeType(ext) {
+    const mimeTypes = {
+        // 图片类型
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png': 'image/png',
+        'gif': 'image/gif',
+        'bmp': 'image/bmp',
+        'webp': 'image/webp',
+        'svg': 'image/svg+xml',
+        'ico': 'image/x-icon',
+        
+        // 视频类型
+        'mp4': 'video/mp4',
+        'mov': 'video/quicktime',
+        'avi': 'video/x-msvideo',
+        'mkv': 'video/x-matroska',
+        'flv': 'video/x-flv',
+        'wmv': 'video/x-ms-wmv',
+        'webm': 'video/webm',
+        
+        // 音频类型
+        'mp3': 'audio/mpeg',
+        'wav': 'audio/wav',
+        'ogg': 'audio/ogg',
+        'flac': 'audio/flac',
+        'aac': 'audio/aac',
+        'm4a': 'audio/mp4',
+        
+        // 文档类型
+        'pdf': 'application/pdf',
+        'txt': 'text/plain',
+        'rtf': 'application/rtf',
+        'csv': 'text/csv',
+        'xml': 'application/xml',
+        'json': 'application/json',
+        
+        // Office文档
+        'doc': 'application/msword',
+        'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'xls': 'application/vnd.ms-excel',
+        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'ppt': 'application/vnd.ms-powerpoint',
+        'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'odt': 'application/vnd.oasis.opendocument.text',
+        'ods': 'application/vnd.oasis.opendocument.spreadsheet',
+        
+        // 压缩文件
+        'zip': 'application/zip',
+        'rar': 'application/x-rar-compressed',
+        '7z': 'application/x-7z-compressed',
+        'tar': 'application/x-tar',
+        'gz': 'application/gzip',
+        
+        // 编程相关
+        'html': 'text/html',
+        'htm': 'text/html',
+        'css': 'text/css',
+        'js': 'application/javascript',
+        'php': 'application/x-httpd-php',
+        'py': 'text/x-python',
+        'java': 'text/x-java-source',
+        'c': 'text/x-csrc',
+        'cpp': 'text/x-c++src',
+        'h': 'text/x-chdr',
+        'sh': 'application/x-sh',
+        'bat': 'application/x-msdownload',
+        
+        // 其他常见类型
+        'apk': 'application/vnd.android.package-archive',
+        'exe': 'application/x-msdownload',
+        'dmg': 'application/x-apple-diskimage',
+        'iso': 'application/x-iso9660-image',
+        'msi': 'application/x-msdownload'
+    };
+    return mimeTypes[ext] || 'application/octet-stream'; // 默认使用二进制流类型
 }

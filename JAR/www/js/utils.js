@@ -1,18 +1,18 @@
 // ==================== 工具函数 ====================
 
 /**
- * 格式化文件大小 (输入为KB)
- * @param {number} kilobytes - 文件大小(KB)
+ * 格式化文件大小 (输入为byte)
+ * @param {number} bytes - 文件大小(byte)
  * @returns {string} 格式化后的文件大小字符串
  */
-function formatFileSize(kilobytes) {
-  if (kilobytes === 0) return '0 KB';
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 B';
   
   const k = 1024;
-  const sizes = ['KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(kilobytes) / Math.log(k));
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
   
-  return parseFloat((kilobytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
 /**

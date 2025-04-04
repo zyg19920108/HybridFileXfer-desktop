@@ -206,16 +206,14 @@ function createFileItem(file) {
   const fileIcon = getFileIcon(fileExt);
   
   // 确定状态
-  let statusText, statusClass;
+  let statusContent;
   if (file.progress === 100) {
-    statusText = '已完成';
-    statusClass = 'completed';
+    statusContent = `<button class="open-file-btn" onclick="aardio?.openpath?.('${file.path}')">打开文件</button>`;
   } else if (file.progress > 0) {
-    statusText = file.type === 'upload' ? '上传中...' : '下载中...';
-    statusClass = file.type === 'upload' ? 'uploading' : 'downloading';
+    const statusText = file.type === 'upload' ? '上传中...' : '下载中...';
+    statusContent = `${statusText} (${file.progress.toFixed(2)}%)`;
   } else {
-    statusText = '等待中';
-    statusClass = 'queued';
+    statusContent = '等待中';
   }
   
   // 创建文件项
@@ -243,9 +241,12 @@ function createFileItem(file) {
       <span class="file-size">
         ${formatFileSize(currentSizeKB)} / ${formatFileSize(totalSizeKB)}
       </span>
-      <span class="file-status status-${statusClass}">
-        ${statusText} (${file.progress.toFixed(2)}%)
-      </span>
+      ${file.progress === 100 ? 
+        `<button class="open-folder-btn" onclick="aardio?.openpath?.('${file.path}')">打开文件</button>` : 
+        `<span class="file-status status-${file.progress > 0 ? 
+          (file.type === 'upload' ? 'uploading' : 'downloading') : 'queued'}">
+          ${statusContent}
+        </span>`}
     </div>
   `;
   
@@ -258,7 +259,6 @@ function createFileItem(file) {
 function updateFileItem(fileItem, file) {
   const fileName = file.path.split('/').pop();
   const currentProgress = parseFloat(fileItem.querySelector('.file-progress-bar').style.width);
-  const currentStatus = fileItem.querySelector('.file-status').textContent.split(' ')[0];
   
   // 获取当前显示的文件大小
   const currentSizeText = fileItem.querySelector('.file-size').textContent;
@@ -272,6 +272,18 @@ function updateFileItem(fileItem, file) {
   // 更新进度条
   const progressBar = fileItem.querySelector('.file-progress-bar');
   progressBar.style.width = `${file.progress.toFixed(2)}%`;
+  
+  // 处理完成状态
+  if (file.progress === 100) {
+    const statusDiv = fileItem.querySelector('.file-details');
+    statusDiv.innerHTML = `
+      <span class="file-size">${newSizeText}</span>
+      <button class="open-folder-btn" onclick="aardio?.openpath?.('${file.path}')">打开文件</button>
+    `;
+    fileItem.classList.add('updating');
+    setTimeout(() => fileItem.classList.remove('updating'), 300);
+    return;
+  }
   
   // 确定新状态
   let statusText, statusClass;
